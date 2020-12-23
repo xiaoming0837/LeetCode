@@ -3,35 +3,40 @@ package main
 import "fmt"
 
 func main() {
-	// fmt.Printf("%s\n", longestPalindrome("babad"))
-	// fmt.Printf("%s\n", longestPalindrome("cbbd"))
-	// fmt.Printf("%s\n", longestPalindrome("a"))
-	// fmt.Printf("%s\n", longestPalindrome("ac"))
+	fmt.Printf("%s\n", longestPalindrome("babad"))
+	fmt.Printf("%s\n", longestPalindrome("cbbd"))
+	fmt.Printf("%s\n", longestPalindrome("a"))
+	fmt.Printf("%s\n", longestPalindrome("ac"))
 	fmt.Printf("%s\n", longestPalindrome("addddadadasfgg1123"))
 }
 
-// longestPalindrome
+// longestPalindrome DP palindrome
 func longestPalindrome(s string) string {
-	return palindromes(s, 0, len(s)-1)
-}
+	n := len(s)
+	ans := ""
+	dp := make([][]int, n)
+	for i := 0; i < n; i++ {
+		dp[i] = make([]int, n)
+	}
 
-// get palindromes
-func palindromes(s string, left, right int) string {
-	if s[left] == s[right] {
-		s = s[left:right]
-		if left-right <= 2 {
-			return
+	for l := 0; l < n; l++ {
+		for i := 0; l+i < n; i++ {
+			j := l + i
+			if l == 0 {
+				dp[i][j] = 1
+			} else if l == 1 {
+				if s[i] == s[j] {
+					dp[i][j] = 1
+				}
+			} else {
+				if s[i] == s[j] {
+					dp[i][j] = dp[i+1][j-1]
+				}
+			}
+			if dp[i][j] > 0 && l+1 > len(ans) {
+				ans = s[i : i+l+1]
+			}
 		}
 	}
-	if left-right == 1 {
-		return s[lef]
-	}
-
-	// left
-	leftVal := palindromes(s, left, right-1)
-	rightVal := palindromes(s, left+1, right)
-	if len(leftVal) < len(rightVal) {
-		return rightVal
-	}
-	return leftVal
+	return ans
 }

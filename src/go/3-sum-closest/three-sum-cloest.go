@@ -6,11 +6,11 @@ import (
 )
 
 func main() {
-	fmt.Println(threeSumCloest([]int{-1, 0, 1, 2, -1, -4}))
+	fmt.Println(threeSumClosest([]int{-1, 2, 1, -4}, 1))
 
 }
 
-func threeSumCloest(nums []int, target int) int {
+func threeSumClosest(nums []int, target int) int {
 	sort.Ints(nums)
 	l := len(nums)
 	result := target
@@ -19,17 +19,22 @@ func threeSumCloest(nums []int, target int) int {
 			continue
 		}
 		third := l - 1
-		tmp := target - nums[first]
 		for second := first + 1; second < third; {
 			if second > first+1 && nums[second] == nums[second-1] {
 				second++
 				continue
 			}
-			if nums[second]+nums[third] == tmp {
+			val := nums[first] + nums[second] + nums[third]
+			if val == target {
 				return target
 			}
-			val := abs(nums[second] + nums[third] + nums[first] - target)
-			if val < result {
+			if val < target {
+				second++
+			} else {
+				third--
+			}
+			if result == target || abs(val-target) < abs(result-target) {
+				fmt.Printf("%d %d %d \n", nums[first], nums[second], nums[third])
 				result = val
 			}
 		}
